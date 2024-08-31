@@ -1,0 +1,32 @@
+#fixed-container {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Esto crea la separación entre los cuadrados */
+    z-index: 100;
+  }
+  
+  .fixed-square {
+    width: 2rem;
+    height: 2rem;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .number {
+    display: inline-block;
+  }
+
+  video{
+    width: 20rem;
+  }
