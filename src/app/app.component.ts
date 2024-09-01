@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
@@ -20,11 +20,14 @@ export class AppComponent implements OnInit{
   sequence:any = [];
    acc = 0;
    study:boolean = false;
-  constructor(private http: HttpClient) {}
+
+  final = false;
+
+  constructor(private http: HttpClient, private viewportScroller: ViewportScroller) {}
 
 
   ngOnInit() {
-    this.acc++;
+   
      this.sequence = this.generateRandomSequence(93);
     this.loadJsonData(this.sequence.pop());
   }
@@ -47,15 +50,24 @@ export class AppComponent implements OnInit{
     return this.http.get(`/${filename}`);
   }
 
+  finalFn(){
+    this.final = !this.final;
+    this.sequence = this.generateRandomSequence((this.final)?15:93);
+    this.loadJsonData(this.sequence.pop());
+  }
+
   loadJsonData(num:any) {
-    
-      this.getJsonData('dummy/'+(num)+'.json').subscribe(
+
+    const url_dummy = this.final?'inttt/live/dummy/repaso'+(num)+'.json':'inttt/live/dummy/'+(num)+'.json';
+
+    this.acc++;
+      this.getJsonData(url_dummy).subscribe(
         (data) => {
           this.jsonData = data;
           console.log('JSON data loaded:', this.jsonData);
           setTimeout(() => {
             this.startAutoScroll()
-          }, 3000);
+          }, 2000);
         },
         (error) => {
           console.error('Error loading JSON data:', error);
@@ -63,6 +75,14 @@ export class AppComponent implements OnInit{
       );
     
 
+  }
+
+  next(){
+    this.loadJsonData(this.sequence.pop());
+  
+    setTimeout(() => {
+      this.viewportScroller.scrollToPosition([0, 0]);
+    }, 2000);
   }
 
   startAutoScroll() {
@@ -79,11 +99,12 @@ export class AppComponent implements OnInit{
       container.scrollTop = scrollHeight * percentage;
 
       if (percentage < 1) {
+        
         requestAnimationFrame(step);
       } else {
         // El scroll ha llegado al final
         this.loadJsonData(this.sequence.pop());
-        this.acc++;
+        
       }
     };
 

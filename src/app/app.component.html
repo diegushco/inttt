@@ -5,6 +5,9 @@
   <div (click)="study = !study" class="fixed-square">
     <span class="number">Es</span>
   </div>
+  <div (click)="finalFn()" class="fixed-square">
+    <span class="number">Fn</span>
+  </div>
 </div>
 <div class="container mt-4" #scrollContainer class="scroll-container">
   <div class="row" >
@@ -63,7 +66,11 @@
       </div>
     </div>
   </div>
+  <div *ngIf="study" style="text-align: right;">
+    <button (click)="next()" class="btn btn-primary">Siguiente</button>
+  </div>
 </div>
+
 <div id="audioCode">
   <div
     class="video-js vjs-default-skin audio-dimensions vjs-controls-enabled vjs-audio vjs-workinghover vjs-playing vjs-has-started vjs-live vjs-user-active"
