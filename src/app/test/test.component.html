@@ -1,0 +1,70 @@
+<div class="row" >
+    <div class="col-12">
+      <div *ngFor="let pregunta of jsonData?.preguntas" class="mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title mb-3" [innerHTML]="pregunta.pregunta"></h2>
+
+            <div class="row">
+              <div class="col-md-4 mb-3 mb-md-0">
+                <img
+                  [src]="'data:image/jpeg;base64,' + pregunta.foto64"
+                  class="img-fluid rounded"
+                  alt="Imagen de la pregunta"
+                />
+                <br>
+                <video *ngIf="study" controls>
+                  <source [src]="pregunta.vimeo_Preg_link" type="video/mp4">
+                  Tu navegador no soporta el elemento de video.
+                </video>
+              </div>
+
+              <div class="col-md-8">
+                <ul class="list-group">
+                    <li
+                      *ngFor="let respuesta of pregunta.opciones; let i = index"
+                      class="list-group-item d-flex align-items-center"
+                      (click)="seleccionarRespuesta(pregunta, respuesta, i)"
+                      [class.disabled]="pregunta.respondida"
+                      [style.pointer-events]="pregunta.respondida ? 'none' : 'auto'"
+                    >
+                      <div
+                        [ngClass]="{
+                          'me-2 bg-success rounded-circle d-flex justify-content-center align-items-center': respuesta.respuestaSN == -1 && pregunta.mostrarCorrecta,
+                          'me-2 bg-danger rounded-circle d-flex justify-content-center align-items-center': respuesta.respuestaSN != -1 && respuesta.seleccionada
+                        }"
+                        style="width: 24px; height: 24px"
+                      >
+                        <div class="check-icon"></div>
+                      </div>
+                      <h3 [innerHTML]="respuesta.respuesta"></h3>
+                    </li>
+                  </ul>
+                <div *ngIf="study">
+                  <button #explanationToggle
+                      (click)="explanationToggle.setAttribute('aria-expanded', explanationToggle.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')"
+                      aria-expanded="false">
+                    Explicacion
+                  </button>
+
+                  <ng-container *ngIf="explanationToggle.getAttribute('aria-expanded') === 'true'">
+                    <div [innerHTML]="pregunta.texts"></div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>Resultado de {{jsonData?.preguntas?.length}}</h4>
+  <h5>Correctas: {{respuestasCorrectas}}</h5>
+  <h5>Incorrectas: {{respuestasIncorrectas}}</h5>
+
+  <br>
+  <hr>
+
+  <button class="btn btn-primary" routerLink="/tests">Volver a examenes</button>
+  <br><br><br>

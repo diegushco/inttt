@@ -1,0 +1,40 @@
+<div class="container mt-4"  >
+  <div class="row">
+    <div class="col-12">
+
+        <h4>Examenes mas fallados</h4>
+        <button (click)="goTest(p, 'f')" *ngFor="let p of arrayDel1Al10" class="btn primary btn-primary m-3">
+            {{p}}
+        </button>
+
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4"  >
+    <div class="row">
+      <div class="col-12">
+  
+          <h4>Examenes finales</h4>
+          <button (click)="goTest(p, 'repaso')" *ngFor="let p of arrayDel1Al15" class="btn primary btn-primary m-3">
+              {{p}}
+          </button>
+  
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="container mt-4"  >
+    <div class="row">
+      <div class="col-12">
+  
+          <h4>Examenes practicas</h4>
+          <button (click)="goTest(p, '')" *ngFor="let p of arrayDel1Al93" class="btn primary btn-primary m-3">
+              {{p}}
+          </button>
+  
+      </div>
+    </div>
+  </div>
+  
