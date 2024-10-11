@@ -4,7 +4,7 @@ import { TestsComponent } from './tests/tests.component';
 import { TestComponent } from './test/test.component';
 
 export const routes: Routes = [
-    { path: '', component: ScrollComponent },
+    { path: '', component: TestsComponent },
     {  path: 'tests', component: TestsComponent },
     {  path: 'test/:id', component: TestComponent },
 ];
