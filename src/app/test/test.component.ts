@@ -12,15 +12,22 @@ import { Observable } from 'rxjs';
   styleUrl: './test.component.scss'
 })
 export class TestComponent implements OnInit{
-  jsonData:any;
+  jsonData:any =  {}
   study = true;
   respuestasCorrectas: number = 0;
   respuestasIncorrectas: number = 0;
+  private key = 'inttt';
   constructor(private http: HttpClient, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
       const id = this.route.snapshot.paramMap.get('id')!;
-      this.loadJsonData(id);
+      console.log("ID", id)
+      if(id=='error-1'){
+        this.jsonData["preguntas"] = this.getArray();
+      }else{
+        this.loadJsonData(id);
+      }
+      //this.loadJsonData(id);
   }
 
   getJsonData(filename: string): Observable<any> {
@@ -51,10 +58,17 @@ export class TestComponent implements OnInit{
         if (pregunta.respondida) {
           return; // Si ya fue respondida, no hace nada
         }
+
+        if (respuesta.respuestaSN == -1) {
+          this.respuestasCorrectas++;
+        } else {
+          this.respuestasIncorrectas++;
+          this.addItem(pregunta);
+        }
     
         // Marca la pregunta como respondida
-        pregunta.respondida = true;
-    
+        pregunta.respondida = respuesta.respuestaSN == -1?-1:1;
+        
         // Marca la respuesta como seleccionada
         respuesta.seleccionada = true;
     
@@ -62,11 +76,33 @@ export class TestComponent implements OnInit{
         pregunta.mostrarCorrecta = true;
     
         // Verifica si la respuesta seleccionada es correcta
-        if (respuesta.respuestaSN == -1) {
-          this.respuestasCorrectas++;
-        } else {
-          this.respuestasIncorrectas++;
+        
+      }
+
+      getArray(): any[] {
+        const storedValue = localStorage.getItem(this.key);
+        return storedValue ? JSON.parse(storedValue) : [];
+      }
+    
+      addItem(item: any): boolean {
+        const array = this.getArray();
+        
+        // Verificar si el item ya existe en el array
+        const exists = array.some(existingItem => 
+          JSON.stringify(existingItem) === JSON.stringify(item)
+        );
+    
+        if (!exists) {
+          array.push(item);
+          this.saveArray(array);
+          return true; // Indica que el item fue añadido
         }
+    
+        return false; // Indica que el item ya existía y no fue añadido
+      }
+    
+      private saveArray(array: any[]): void {
+        localStorage.setItem(this.key, JSON.stringify(array));
       }
     
 }

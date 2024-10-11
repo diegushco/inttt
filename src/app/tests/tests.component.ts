@@ -21,4 +21,14 @@ export class TestsComponent {
 
 
   }
+
+  goError(num:Number, type:string) {
+    this.router.navigate(['/test', type+num]);
+
+
+  }
+
+  clear(){
+    localStorage.removeItem('inttt');
+  }
 }
